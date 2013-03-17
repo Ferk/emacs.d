@@ -263,13 +263,21 @@ configuring, and also it will make emacs load faster."
 ;; Create cache director if it doesn't exist
 (mkdir "~/.cache/emacs" 't)
 
-;; Write customize options for this machine in a different file (this file won't be under version control to allow for specific installations to override the settings)
+;; Write customize options for this machine in a different file 
+;; (this file won't be under version control to allow for specific installations
+;; to override the settings)
 (setq custom-file "~/.emacs.d/custom.el")
-(load custom-file)
+(if (file-exists-p custom-file)
+    (load custom-file)
+  (customize-save-customized))
 
-;; Custom-theme files will be used instead to save the settings, use a particular directory for them (and not just .emacs.d)
+;; Custom-theme files will be used instead to set settings
+;; theme/ directory will be usedfor them (and not just .emacs.d)
 (setq custom-theme-directory "~/.emacs.d/themes/")
 
-;; Load base config theme
-(load-theme 'config-base)
+;; Default themes to load if no other was set
+(and (eq custom-enabled-themes '())
+     (load-theme 'darkclean)
+     (load-theme 'config-base))
+
 
