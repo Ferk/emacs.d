@@ -3,6 +3,7 @@
 ;;
 ;; Author: Fernando Carmona Varo <ferkiwi@gmail.com>
 ;; URL: https://github.com/Ferk/xdg_config/raw/master/HOME/.emacs.d/init.el
+;; Related searches: argen teens, argen-teens, argen-teens mureil
 
 ;; Replace the annoying "yes or no" questions to a single keystroke "y or n"
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -259,96 +260,16 @@ configuring, and also it will make emacs load faster."
 (global-set-key (kbd "<M-gr>") (quote rgrep))
 ;;(global-set-key "\347r" (quote rgrep))
 
+;; Create cache director if it doesn't exist
+(mkdir "~/.cache/emacs" 't)
 
-;; (add-to-list 'load-path "~/.emacs.d/evil")
-;; (require 'evil)
-;; (evil-mode 1)
+;; Write customize options for this machine in a different file (this file won't be under version control to allow for specific installations to override the settings)
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
 
-
-;; -------------------
-;;;;;;;;;;;;;;;;;;;;;;
-;;; Customize
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(backup-directory-alist (quote (("." . "/home/ferk/.emacs.d/backups/"))))
- '(clean-buffer-list-delay-special 900)
- '(column-number-mode t)
- '(comint-input-ignoredups t)
- '(comint-prompt-read-only t)
- '(comint-scroll-to-bottom-on-input (quote this))
- '(compilation-auto-jump-to-first-error t)
- '(compilation-scroll-output (quote first-error))
- '(compilation-skip-threshold 2)
- '(compilation-window-height 6)
- '(completion-ignored-extensions (quote (".o" ".elc" ".class" "java~" ".ps" ".abs" ".mx" ".~jv" ".elf" ".bin")))
- '(cpp-edit-list (quote (("1" default font-lock-comment-face t) ("0" font-lock-comment-face default both))))
- '(cpp-known-face (quote default))
- '(cpp-unknown-face (quote default))
- '(custom-enabled-themes (quote (darkclean)))
- '(custom-safe-themes (quote ("1346451da65eb33475f56746e55feefd8f1bd29b5375e93ba869153140ec9ec5" "7dccd51c91b656df5726f71c2c04531546a48453cd9a349762acba993d6db83f" "f2bdbc41e575d67b0714de86f6b7105393bcd0198a941f719084171af6d9d67f" "5d3d4c3438b34957498b590cbacade51506c05d4f49aba6c0a79d202c9d06da9" "83656b96bbb718461906b39ba7c11e2beb9d268b" "d49ce0533a835b784afbda9d0c27445537dec93d" default)))
- '(custom-theme-directory "~/.emacs.d/themes/")
- '(dired-auto-revert-buffer (quote dired-directory-changed-p))
- '(dired-guess-shell-alist-user (quote (("\\.\\(gz\\|bz2\\|lzma\\|\\tar\\|zip\\|rar\\)" "unp -U" "xdg-open") ("." "xdg-open"))))
- '(dired-isearch-filenames (quote dwim))
- '(dired-listing-switches "-alhG --time-style=iso")
- '(ede-project-directories (quote ("/home/ferk/eth_soundcard/example_lwip")))
- '(eshell-visual-commands (quote ("vi" "screen" "top" "less" "more" "lynx" "ncftp" "pine" "tin" "trn" "elm" "alsamixer" "wicd-curses")))
- '(flymake-gui-warnings-enabled nil)
- '(gdb-show-main t)
- '(global-hl-line-mode t)
- '(grep-command "grep . -nHIr -e ")
- '(grep-scroll-output t)
- '(ido-enable-flex-matching t)
- '(ido-everywhere t)
- '(ido-max-work-directory-list 64)
- '(ido-max-work-file-list 64)
- '(ido-mode (quote both) nil (ido))
- '(ido-use-virtual-buffers t)
- '(indicate-buffer-boundaries (quote left))
- '(indicate-empty-lines t)
- '(inhibit-startup-screen t)
- '(iswitchb-buffer-ignore (quote ("^ " "^*Messages" "^*Completions")))
- '(iswitchb-use-virtual-buffers t nil (recentf))
- '(kill-do-not-save-duplicates t)
- '(make-backup-files nil)
- '(mark-even-if-inactive t)
- '(midnight-delay 1800)
- '(midnight-mode t nil (midnight))
- '(mouse-avoidance-mode (quote animate) nil (avoid))
- '(org-agenda-files (quote ("~/org/home.org" "~/org/work.org")))
- '(org-mode-hook nil t)
- '(org-src-fontify-natively t)
- '(org-startup-with-inline-images t)
- '(outline-regexp "\\([*^L]+\\|.*{{{\\|.*#{\\)")
- '(package-archives (quote (("gnu" . "http://elpa.gnu.org/packages/") ("elpa" . "http://tromey.com/elpa/") ("marmalade" . "http://marmalade-repo.org/packages/"))))
- '(recentf-auto-cleanup (quote never))
- '(recentf-max-saved-items 128)
- '(recentf-mode t)
- '(recentf-save-file "~/.cache/emacs/recentf")
- '(require-final-newline t)
- '(safe-local-variable-values (quote ((eval and (setq dir-local-dir (locate-dominating-file (buffer-file-name) ".dir-locals.el")) (setq compile-command (concat "cd " dir-local-dir " && ./compile.sh")) (setq gud-gdb-command-name (concat dir-local-dir "_/debug.sh -i=mi")) (setq grep-command (concat dir-local-dir "_/findInSource.sh . ")) (setq tags-table-list (list (concat dir-local-dir "TAGS"))) (setq semanticdb-project-roots (list "~/Source/ToolChain_STM32/CommonLibraries/" "~/Source/ToolChain_STM32/ToolChain/**/*" dir-local-dir)) (ede-cpp-root-project "ttc_project" :file (concat dir-local-dir "required_version"))) (eval and (setq dir-local-dir (locate-dominating-file (buffer-file-name) ".dir-locals.el")) (setq compile-command (concat "cd " dir-local-dir " && ./compile.sh")) (setq gud-gdb-command-name (concat dir-local-dir "_/debug.sh -i=mi")) (setq grep-command (concat dir-local-dir "_/findInSource.sh . ")) (setq tags-table-list (list (concat dir-local-dir "TAGS"))) (setq semanticdb-project-roots (list dir-local-dir (concat dir-local-dir "additionals/examples"))) (ede-cpp-root-project "ttc_project" :file (concat dir-local-dir "required_version"))) (eval and (setq dir-local-dir (locate-dominating-file (buffer-file-name) ".dir-locals.el")) (setq compile-command (concat "cd " dir-local-dir " && ./compile.sh")) (setq gud-gdb-command-name (concat dir-local-dir "_/debug.sh -i=mi")) (setq grep-command (concat dir-local-dir "_/findInSource.sh . ")) (setq tags-table-list (list (concat dir-local-dir "TAGS"))) (setq semanticdb-project-roots (list dir-local-dir (concat dir-local-dir "additionals/examples"))) (ede-cpp-root-project dir-local-dir :file (concat dir-local-dir "required_version")) (semantic-add-system-include dir-local-dir (quote c-mode))) (eval and (setq dir-local-dir (locate-dominating-file (buffer-file-name) ".dir-locals.el")) (setq compile-command (concat "cd " dir-local-dir " && ./compile.sh")) (setq gud-gdb-command-name (concat dir-local-dir "_/debug.sh -i=mi")) (setq grep-command (concat dir-local-dir "_/findInSource.sh . ")) (setq tags-table-list (list (concat dir-local-dir "TAGS"))) (setq semanticdb-project-roots (list dir-local-dir (concat dir-local-dir "additionals/examples"))) (ede-cpp-root-project dir-local-dir :file (concat dir-local-dir "required_version"))) (eval and (setq dir-local-dir (locate-dominating-file (buffer-file-name) ".dir-locals.el")) (setq compile-command (concat "cd " dir-local-dir " && ./compile.sh")) (setq gud-gdb-command-name (concat dir-local-dir "_/debug.sh -i=mi")) (setq grep-command (concat dir-local-dir "_/findInSource.sh . ")) (setq tags-table-list (list (concat dir-local-dir "TAGS"))) (setq semanticdb-project-roots (list dir-local-dir (concat dir-local-dir "additionals/examples")))) (eval and (setq dir-local-dir (locate-dominating-file (buffer-file-name) ".dir-locals.el")) (setq compile-command (concat "cd " dir-local-dir " && ./compile.sh")) (setq gud-gdb-command-name (concat dir-local-dir "_/debug.sh -i=mi")) (setq grep-command (concat dir-local-dir "_/findInSource.sh . ")) (setq tags-table-list (list (concat dir-local-dir "TAGS"))) (setq semanticdb-project-roots (list dir-local-dir))) (gdb-use-separate-io-buffer))))
- '(savehist-mode t nil (savehist))
- '(scroll-bar-mode (quote right))
- '(show-paren-delay 0.125)
- '(show-paren-mode t)
- '(show-paren-ring-bell-on-mismatch nil)
- '(show-paren-style (quote expression))
- '(size-indication-mode t)
- '(speedbar-directory-button-trim-method (quote trim))
- '(tags-case-fold-search nil)
- '(tags-revert-without-query t)
- '(tool-bar-mode nil)
- '(tooltip-delay 0.4)
- '(uniquify-buffer-name-style (quote post-forward) nil (uniquify) "distinguish duplicate filenames renaming the buffers to contain part of the path")
- '(vc-follow-symlinks t)
- '(visible-bell t)
- '(x-select-enable-clipboard t))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:stipple nil :background "#080808" :foreground "#FFF" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 117 :width normal :foundry "unknown" :family "ProggyCleanTTSZBP")))))
+;; Custom-theme files will be used instead to save the settings, use a particular directory for them (and not just .emacs.d)
+(setq custom-theme-directory "~/.emacs.d/themes/")
+
+;; Load base config theme
+(load-theme 'config-base)
+
