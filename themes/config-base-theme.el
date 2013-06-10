@@ -1,4 +1,4 @@
-;;; config-theme.el --- Custom LaTex configuration theme
+;;; config-base-theme.el --- Custom configuration options
 
 ;; Copyright (C) 2013 Free Software Foundation, Inc.
 

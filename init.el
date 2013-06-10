@@ -59,10 +59,6 @@
 (add-hook 'c-mode-hook 'electric-indent-mode)
 (add-hook 'shell-script-mode-hook 'electric-indent-mode)
 
-;;;;Completion ignores filenames ending in any string in this list.
-(setq completion-ignored-extensions
-      '(".o" ".elc" ".class" "~" "#" ".ps" ".abs" ".mx" ".~jv" ))
-
 ;;; Set up which modes to use for which file extensions
 (setq auto-mode-alist
       (append
@@ -85,6 +81,7 @@
          ) auto-mode-alist))
 (modify-coding-system-alist 'file "\\.po$\\|\\.po\\."
                             'po-find-file-coding-system)
+
 
 ;;(load-file "~/.emacs.d/cedet-1.1/common/cedet.elc")
 
