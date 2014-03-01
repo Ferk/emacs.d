@@ -24,10 +24,6 @@
 	  (lambda () (setq truncate-lines t)))
 ;; auto update the pdf when regenerated
 (add-hook 'doc-view-mode-hook 'auto-revert-mode)
-;; Add all org files from desired dir as agendas
-(add-hook 'org-load-hook 
-	  (lambda () (setq org-agenda-files (file-expand-wildcards "~/org/*.org"))))
-
 
 ;;; C-mode Hooks
 (add-hook 'c-mode-hook
@@ -150,8 +146,8 @@ mark active) and deletes them."
   "Indent the whole buffer"
   (interactive)
   (indent-region (point-min) (point-max) nil)
-  (delete-trailing-whitespace)
-  (untabify (point-min) (point-max)))
+  ;;(untabify (point-min) (point-max))
+  (delete-trailing-whitespace))
 
 (defalias 'iwb 'indent-whole-buffer)
 (define-key global-map
