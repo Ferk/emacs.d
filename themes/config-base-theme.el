@@ -106,7 +106,7 @@
  '(recentf-auto-cleanup (quote never))
  '(recentf-max-saved-items 128)
  '(recentf-mode t)
- '(recentf-save-file "~/emacs.d/recentf")
+ '(recentf-save-file "~/.emacs.d/recentf")
 
  ;; TAGs
  '(tags-case-fold-search nil)
