@@ -1,4 +1,4 @@
-;;; config-theme.el --- Custom LaTex configuration theme
+;;; config-base-theme.el --- Custom configuration options
 
 ;; Copyright (C) 2013 Free Software Foundation, Inc.
 
@@ -130,6 +130,8 @@
  '(midnight-delay 1800)
  '(midnight-mode t nil (midnight))
 
+ '(c-default-style "linux")
+ 
  '(cpp-edit-list '(("1" default font-lock-comment-face t) 
 		   ("0" font-lock-comment-face default both)
 		   ))

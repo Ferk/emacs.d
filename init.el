@@ -24,10 +24,6 @@
 	  (lambda () (setq truncate-lines t)))
 ;; auto update the pdf when regenerated
 (add-hook 'doc-view-mode-hook 'auto-revert-mode)
-;; Add all org files from desired dir as agendas
-(add-hook 'org-load-hook 
-	  (lambda () (setq org-agenda-files (file-expand-wildcards "~/org/*.org"))))
-
 
 ;;; C-mode Hooks
 (add-hook 'c-mode-hook
@@ -59,10 +55,6 @@
 (add-hook 'c-mode-hook 'electric-indent-mode)
 (add-hook 'shell-script-mode-hook 'electric-indent-mode)
 
-;;;;Completion ignores filenames ending in any string in this list.
-(setq completion-ignored-extensions
-      '(".o" ".elc" ".class" "~" "#" ".ps" ".abs" ".mx" ".~jv" ))
-
 ;;; Set up which modes to use for which file extensions
 (setq auto-mode-alist
       (append
@@ -85,6 +77,7 @@
          ) auto-mode-alist))
 (modify-coding-system-alist 'file "\\.po$\\|\\.po\\."
                             'po-find-file-coding-system)
+
 
 ;;(load-file "~/.emacs.d/cedet-1.1/common/cedet.elc")
 
@@ -153,8 +146,8 @@ mark active) and deletes them."
   "Indent the whole buffer"
   (interactive)
   (indent-region (point-min) (point-max) nil)
-  (delete-trailing-whitespace)
-  (untabify (point-min) (point-max)))
+  ;;(untabify (point-min) (point-max))
+  (delete-trailing-whitespace))
 
 (defalias 'iwb 'indent-whole-buffer)
 (define-key global-map
