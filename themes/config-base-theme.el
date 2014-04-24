@@ -52,6 +52,8 @@
  '(iswitchb-buffer-ignore (quote ("^ " "^*Messages" "^*Completions")))
  '(iswitchb-use-virtual-buffers t nil (recentf))
  '(completion-ignored-extensions (quote (".o" ".elc" ".class" "java~" ".ps" ".abs" ".mx" ".~jv" ".elf" ".bin")))
+ '(ido-default-buffer-method (quote selected-window))
+ '(ido-default-file-method (quote selected-window))
 
  ;; Parenthesis highlight
  '(show-paren-delay 0.125)
