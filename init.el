@@ -112,7 +112,7 @@ selected) to it. Ant then replace the region with the output of the command (if 
 	(shell-command command arg)
       ;; Active region
       (if (eq arg nil)
-          (shell-command-on-region begin end command t t)
+		  (shell-command-on-region begin end command t t)
         (shell-command-on-region begin end command)))))
 (global-set-key [f3] 'shell-command-general)
 
@@ -203,8 +203,9 @@ configuring, and also it will make emacs load faster."
   (interactive)
   (require 'bytecomp)
   (if
-      (string-match (concat (getenv "HOME") "/\.emacs.*\.el")
+      (and (string-match (concat (getenv "HOME") "/\.emacs.*\.el")
                     (buffer-file-name))
+		   (not (string-match "\.emacs\.d/elpa" (buffer-file-name))))
       (byte-compile-file (buffer-file-name))))
 
 
@@ -287,8 +288,11 @@ re-downloaded in order to locate PACKAGE."
      (load-theme 'darkclean)
      (load-theme 'config-base))
 
-
+(package-initialize)
 (require-package 'evil)
 (require-package 'ack)
-(require-package 'aock)
+(require-package 'js2-mode)
+(require-package 'auto-complete)
+(require-package 'flymake-jslint)
+(require-package 'flymake-shell)
 ;;(require 'evil)

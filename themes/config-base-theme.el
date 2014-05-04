@@ -102,7 +102,7 @@
 
  ;; Additional package sources
  '(package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-		      ("elpa" . "http://tromey.com/elpa/")
+		      ("melpa" . "http://melpa.milkbox.net/packages/")
 		      ("marmalade" . "http://marmalade-repo.org/packages/")
 		      ))
 
