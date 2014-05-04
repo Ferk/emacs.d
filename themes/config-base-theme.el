@@ -60,6 +60,8 @@
  '(show-paren-style (quote expression))
 
  ;; Dired options
+ '(dired-load-hook (quote ((lambda nil (load "dired-x") (dired-omit-mode)))))
+ '(dired-omit-mode t)
  '(dired-auto-revert-buffer (quote dired-directory-changed-p))
  '(dired-guess-shell-alist-user (quote (("\\.\\(gz\\|bz2\\|lzma\\|\\tar\\|zip\\|rar\\)" "unp -U" "xdg-open") ("." "xdg-open"))))
  '(dired-isearch-filenames (quote dwim))
