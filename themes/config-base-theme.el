@@ -52,6 +52,8 @@
  '(iswitchb-buffer-ignore (quote ("^ " "^*Messages" "^*Completions")))
  '(iswitchb-use-virtual-buffers t nil (recentf))
  '(completion-ignored-extensions (quote (".o" ".elc" ".class" "java~" ".ps" ".abs" ".mx" ".~jv" ".elf" ".bin")))
+ '(ido-default-buffer-method (quote selected-window))
+ '(ido-default-file-method (quote selected-window))
 
  ;; Parenthesis highlight
  '(show-paren-delay 0.125)
@@ -140,6 +142,22 @@
  '(cpp-known-face (quote default))
  '(cpp-unknown-face (quote default))
 
+ ;;;
+ ;;; these settings might require some extra package to be installed through package-el
+ ;;;
+ ;; auto-complete
+ '(global-auto-complete-mode t)
+ ;; yasnippet
+ '(yas-global-mode t)
+ ;; flymake-jslint
+ '(js-mode-hook (quote (flymake-jslint-load)))
+ '(flymake-jslint-args '("--white" "--undef" "--nomen" "--regexp" "--plusplus" "--bitwise" "--newcap" "--sloppy" "--vars" "--eqeq" "--node" "--browser"))
+ ;; flymake-shell
+ '(sh-mode-hook (quote (flymake-shell-load)))
  ;; -- end
 )
 
+;; since these hooks have no customize entry, they
+;; are not loaded without including them here
+(add-hook 'js-mode-hook 'flymake-jslint-load)
+(add-hook 'js2-mode-hook 'flymake-jslint-load)
