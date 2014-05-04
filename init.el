@@ -249,11 +249,25 @@ configuring, and also it will make emacs load faster."
 ;;      (define-key gud-mode-map (kbd "<up>") 'smart-comint-up)
 ;;      (define-key gud-mode-map (kbd "<down>") 'smart-comint-down)))
 
+;;; from purcell/emacs.d
+(defun require-package (package &optional min-version no-refresh)
+  "Install given PACKAGE, optionally requiring MIN-VERSION.
+If NO-REFRESH is non-nil, the available package lists will not be
+re-downloaded in order to locate PACKAGE."
+  (if (package-installed-p package min-version)
+      t
+    (if (or (assoc package package-archive-contents) no-refresh)
+        (package-install package)
+      (progn
+        (package-refresh-contents)
+        (require-package package min-version t)))))
+
+
 ;;;;;;;;;;;
 (global-set-key (kbd "<M-gr>") (quote rgrep))
 ;;(global-set-key "\347r" (quote rgrep))
 
-;; Create cache director if it doesn't exist
+;; Create cache directory if it doesn't exist
 (mkdir "~/.cache/emacs" 't)
 
 ;; Write customize options for this machine in a different file 
@@ -264,8 +278,8 @@ configuring, and also it will make emacs load faster."
     (load custom-file)
   (customize-save-customized))
 
-;; Custom-theme files will be used instead to set settings
-;; theme/ directory will be usedfor them (and not just .emacs.d)
+;; Custom-theme files
+;; load from themes/ subdirectory (and not just .emacs.d)
 (setq custom-theme-directory "~/.emacs.d/themes/")
 
 ;; Default themes to load if no other was set
@@ -274,3 +288,7 @@ configuring, and also it will make emacs load faster."
      (load-theme 'config-base))
 
 
+(require-package 'evil)
+(require-package 'ack)
+(require-package 'aock)
+;;(require 'evil)
