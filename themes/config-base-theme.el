@@ -62,6 +62,8 @@
  '(show-paren-style (quote expression))
 
  ;; Dired options
+ '(dired-load-hook (quote ((lambda nil (load "dired-x") (dired-omit-mode)))))
+ '(dired-omit-mode t)
  '(dired-auto-revert-buffer (quote dired-directory-changed-p))
  '(dired-guess-shell-alist-user (quote (("\\.\\(gz\\|bz2\\|lzma\\|\\tar\\|zip\\|rar\\)" "unp -U" "xdg-open") ("." "xdg-open"))))
  '(dired-isearch-filenames (quote dwim))
@@ -100,7 +102,7 @@
 
  ;; Additional package sources
  '(package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-		      ("elpa" . "http://tromey.com/elpa/")
+		      ("melpa" . "http://melpa.milkbox.net/packages/")
 		      ("marmalade" . "http://marmalade-repo.org/packages/")
 		      ))
 
@@ -140,6 +142,22 @@
  '(cpp-known-face (quote default))
  '(cpp-unknown-face (quote default))
 
+ ;;;
+ ;;; these settings might require some extra package to be installed through package-el
+ ;;;
+ ;; auto-complete
+ '(global-auto-complete-mode t)
+ ;; yasnippet
+ '(yas-global-mode t)
+ ;; flymake-jslint
+ '(js-mode-hook (quote (flymake-jslint-load)))
+ '(flymake-jslint-args '("--white" "--undef" "--nomen" "--regexp" "--plusplus" "--bitwise" "--newcap" "--sloppy" "--vars" "--eqeq" "--node" "--browser"))
+ ;; flymake-shell
+ '(sh-mode-hook (quote (flymake-shell-load)))
  ;; -- end
 )
 
+;; since these hooks have no customize entry, they
+;; are not loaded without including them here
+(add-hook 'js-mode-hook 'flymake-jslint-load)
+(add-hook 'js2-mode-hook 'flymake-jslint-load)
