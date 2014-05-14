@@ -225,7 +225,7 @@ configuring, and also it will make emacs load faster."
     (concat "/sudo::" (buffer-file-name)))
    ;;(and (file-writable-p (buffer-file-name))
 	 (setq buffer-read-only nil));)
-
+(defalias 'sudo 'open-as-root) 
 
 ;; (defun smart-comint-up ()
 ;;    "Implement the behaviour of the up arrow key in comint mode.  At
