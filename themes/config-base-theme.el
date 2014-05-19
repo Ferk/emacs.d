@@ -149,9 +149,8 @@
  '(global-auto-complete-mode t)
  ;; yasnippet
  '(yas-global-mode t)
- ;; flymake-jslint
- '(js-mode-hook (quote (flymake-jslint-load)))
- '(flymake-jslint-args '("--white" "--undef" "--nomen" "--regexp" "--plusplus" "--bitwise" "--newcap" "--sloppy" "--vars" "--eqeq" "--node" "--browser"))
+ ;; flymake-jshint
+ '(js-mode-hook (quote (flymake-jshint-load)))
  ;; flymake-shell
  '(sh-mode-hook (quote (flymake-shell-load)))
  ;; -- end
