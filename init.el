@@ -84,6 +84,9 @@
 
 ;;;; Functions
 
+(autoload 'show-subtree "outline-mode")
+(autoload 'show-entry "outline-mode")
+(autoload 'show-children "outline-mode")
 (defun show-sublevel ()
   "Progressivelly unfolds the current level. First showing the childs and then the whole subtree if the command is issued a second time."
   (interactive)
@@ -93,10 +96,10 @@
 
 (add-hook 'outline-minor-mode-hook
 	  (lambda ()
-	    (local-set-key [S-M-left] 'hide-subtree)
-	    (local-set-key [S-M-right] 'show-sublevel)
-	    (local-set-key [S-M-up] 'outline-previous-visible-heading)
-	    (local-set-key [S-M-down] 'outline-next-visible-heading)
+	    (local-set-key [M-S-left] 'hide-subtree)
+	    (local-set-key [M-S-right] 'show-sublevel)
+	    (local-set-key [M-S-up] 'outline-previous-visible-heading)
+	    (local-set-key [M-S-down] 'outline-next-visible-heading)
 	    ))
 
 
@@ -293,6 +296,6 @@ re-downloaded in order to locate PACKAGE."
 (require-package 'ack)
 (require-package 'js2-mode)
 (require-package 'auto-complete)
-(require-package 'flymake-jslint)
+(require-package 'flymake-jshint)
 (require-package 'flymake-shell)
 ;;(require 'evil)
