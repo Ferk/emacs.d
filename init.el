@@ -3,7 +3,6 @@
 ;;
 ;; Author: Fernando Carmona Varo <ferkiwi@gmail.com>
 ;; URL: https://github.com/Ferk/xdg_config/raw/master/HOME/.emacs.d/init.el
-;; Related searches: argen teens, argen-teens, argen-teens mureil
 
 ;; Replace the annoying "yes or no" questions to a single keystroke "y or n"
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -286,7 +285,7 @@ re-downloaded in order to locate PACKAGE."
 ;; Default themes to load if no other was set
 (and (eq custom-enabled-themes '())
      (load-theme 'darkclean)
-     (load-theme 'config-base))
+     (load-theme 'config-base)) ; all my custom-izable configuration is in here, this is not a color theme
 
 (package-initialize)
 (require-package 'evil)
