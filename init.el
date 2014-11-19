@@ -292,6 +292,7 @@ re-downloaded in order to locate PACKAGE."
      (load-theme 'config-base))
 
 (package-initialize)
+(require 'uniquify)
 (require-package 'evil)
 (require-package 'ack)
 (require-package 'js2-mode)
