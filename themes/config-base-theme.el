@@ -101,7 +101,7 @@
 
  ;; Additional package sources
  '(package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-		      ("melpa" . "https://stable.melpa.org/packages/")))
+                      ("melpa" . "https://stable.melpa.org/packages/")))
 
  ;; Recent files
  '(recentf-auto-cleanup (quote never))
@@ -134,9 +134,8 @@
  '(c-default-style "linux")
  '(tab-width 4)
  
- '(cpp-edit-list '(("1" default font-lock-comment-face t) 
-		   ("0" font-lock-comment-face default both)
-		   ))
+ '(cpp-edit-list '(("1" default font-lock-comment-face t)
+                   ("0" font-lock-comment-face default both)))
  '(cpp-known-face (quote default))
  '(cpp-unknown-face (quote default))
 
@@ -149,4 +148,3 @@
  '(yas-global-mode t)
  ;; -- end
 )
-

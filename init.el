@@ -1,8 +1,10 @@
+;;; init.el --- Emacs Configuration File
 ;;
-;; Emacs Configuration File
 ;;
 ;; Author: Fernando Carmona Varo <ferkiwi@gmail.com>
 ;; URL: https://github.com/Ferk/xdg_config/raw/master/HOME/.emacs.d/init.el
+
+;;; Code:
 
 ;; Replace the annoying "yes or no" questions to a single keystroke "y or n"
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -19,32 +21,32 @@
 (add-hook 'text-mode-hook 'visual-line-mode)
 (add-hook 'org-mode-hook 'visual-line-mode)
 ;; But truncated for dired
-(add-hook 'dired-mode-hook 
-	  (lambda () (setq truncate-lines t)))
+(add-hook 'dired-mode-hook
+          (lambda () (setq truncate-lines t)))
 ;; auto update the pdf when regenerated
 (add-hook 'doc-view-mode-hook 'auto-revert-mode)
 
 ;;; C-mode Hooks
 (add-hook 'c-mode-hook
-	  (lambda ()
-	    
-	    ;; When no makefile, just compile it with "make -k $file"
-	    (unless (or (file-exists-p "makefile")
-			(file-exists-p "Makefile"))
-	      (set (make-local-variable 'compile-command)
-		   (concat "make -k "
-			   (file-name-sans-extension buffer-file-name)))
-	      ;;(flymake-mode)
-	      )
-	    
-	    ;; highlighting for preprocessor	  
-	    (cpp-highlight-buffer t)
+          (lambda ()
 
-	    ;; activate semantic code helpers
-	    ;;(semantic-load-enable-excessive-code-helpers)
-	    ;;(semantic-load-enable-all-exuberent-ctags-support)
-	    
-	    ));; end of C-mode Hooks
+            ;; When no makefile, just compile it with "make -k $file"
+            (unless (or (file-exists-p "makefile")
+                        (file-exists-p "Makefile"))
+              (set (make-local-variable 'compile-command)
+                   (concat "make -k "
+                           (file-name-sans-extension buffer-file-name)))
+              ;;(flymake-mode)
+              )
+
+            ;; highlighting for preprocessor
+            (cpp-highlight-buffer t)
+
+            ;; activate semantic code helpers
+            ;;(semantic-load-enable-excessive-code-helpers)
+            ;;(semantic-load-enable-all-exuberent-ctags-support)
+
+            ));; end of C-mode Hooks
 
 
 ;; outline mode for folding code, will be used for every font-locked mode
@@ -61,7 +63,7 @@
          ("\\.h$"             . c++-mode)
          ("\\.dps$"           . pascal-mode)
          ("\\.py$"            . python-mode)
-         ("\\.rpy$"            . python-mode)
+         ("\\.rpy$"           . python-mode)
          ("\\.Xdefaults$"     . xrdb-mode)
          ("\\.Xenvironment$"  . xrdb-mode)
          ("\\.Xresources$"    . xrdb-mode)
@@ -71,8 +73,8 @@
          ("\\.jl$"            . sawfish-mode)
          ("\\.md$"            . markdown-mode)
          ("\\.po$\\|\\.po\\." . po-mode)
-         ("/[Mm]akefile\\." . makefile-mode)
-         ("/crontab" . crontab-mode)
+         ("/[Mm]akefile\\."   . makefile-mode)
+         ("/crontab"          . crontab-mode)
          ) auto-mode-alist))
 (modify-coding-system-alist 'file "\\.po$\\|\\.po\\."
                             'po-find-file-coding-system)
@@ -83,69 +85,71 @@
 
 ;;;; Functions
 
-(autoload 'show-subtree "outline-mode")
-(autoload 'show-entry "outline-mode")
-(autoload 'show-children "outline-mode")
+(autoload 'outline-show-subtree "outline-mode")
+(autoload 'outline-show-entry "outline-mode")
+(autoload 'outline-show-children "outline-mode")
 (defun show-sublevel ()
-  "Progressivelly unfolds the current level. First showing the childs and then the whole subtree if the command is issued a second time."
+  "Progressivelly unfolds the current level.
+First showing the childs and then the whole subtree if the command is issued a second time."
   (interactive)
   (if (eq last-command this-command)
-      (show-subtree)
-    (or (show-entry) (show-children))))
+      (outline-show-subtree)
+    (or (outline-show-entry) (outline-show-children))))
 
 (add-hook 'outline-minor-mode-hook
-	  (lambda ()
-	    (local-set-key [M-S-left] 'hide-subtree)
-	    (local-set-key [M-S-right] 'show-sublevel)
-	    (local-set-key [M-S-up] 'outline-previous-visible-heading)
-	    (local-set-key [M-S-down] 'outline-next-visible-heading)
-	    ))
+          (lambda ()
+            (local-set-key [M-S-left] 'hide-subtree)
+            (local-set-key [M-S-right] 'show-sublevel)
+            (local-set-key [M-S-up] 'outline-previous-visible-heading)
+            (local-set-key [M-S-down] 'outline-next-visible-heading)
+            ))
 
 
 (defun shell-command-general (command arg)
-  "Run a shell command passing the text of the region (if
-selected) to it. Ant then replace the region with the output of the command (if no argument was passed to this function)."
+  "Run shell command on region.
+Run COMMAND in the shell with ARG arguments, with the region text as input
+\(if selected), then replace the region with the output of the command (if
+no argument was passed to this function)."
   (interactive (list (read-from-minibuffer "Shell command: " nil nil nil 'shell-command-history)
                      current-prefix-arg))
   (let ((begin (if mark-active (region-beginning) 0))
         (end (if mark-active (region-end) 0)))
     (if (= begin end)
         ;; No active region
-	(shell-command command arg)
+        (shell-command command arg)
       ;; Active region
       (if (eq arg nil)
-		  (shell-command-on-region begin end command t t)
+          (shell-command-on-region begin end command t t)
         (shell-command-on-region begin end command)))))
 (global-set-key [f3] 'shell-command-general)
 
 (defun uniq-lines ()
-  "Searches for duplicated lines in region (or whole buffer if no
-mark active) and deletes them."
+  "Search for duplicated lines in region (or whole buffer) and deletes them."
   (interactive)
   (let ((begin (if mark-active (region-beginning) (point-min)))
         (end (if mark-active (region-end) (point-max)))
-	(count 0)
-	)
+        (count 0)
+        )
     (save-excursion
       (save-restriction
-	(narrow-to-region begin end)
-	(goto-char (point-min))
-	(while (not (eobp))
-	  (kill-line 1)
-	  (yank)
-	  (let ((next-line (point)))
-	    (while
-		(re-search-forward
-		 (format "^%s" (regexp-quote (car kill-ring))) nil t)
-	      (replace-match "" nil nil)
-	      (setq count (+ count 1)))
-	    (goto-char next-line)))))
+        (narrow-to-region begin end)
+        (goto-char (point-min))
+        (while (not (eobp))
+          (kill-line 1)
+          (yank)
+          (let ((next-line (point)))
+            (while
+                (re-search-forward
+                 (format "^%s" (regexp-quote (car kill-ring))) nil t)
+              (replace-match "" nil nil)
+              (setq count (+ count 1)))
+            (goto-char next-line)))))
     (princ (format "%d duplicated lines found" count))))
 
 ;;; indent buffer
 ;;;###autoload
 (defun indent-whole-buffer ()
-  "Indent the whole buffer"
+  "Indent the whole buffer."
   (interactive)
   (indent-region (point-min) (point-max) nil)
   ;;(untabify (point-min) (point-max))
@@ -161,7 +165,9 @@ mark active) and deletes them."
 
 ;;; eTAGS
 (defun create-tags (dir-name langs)
-  "Create/update tags file and load it silently."
+  "Create/update tags file and load it silently.
+Argument DIR-NAME Directory where to create/update tags file.
+Argument LANGS Languages to tag from (none for default)."
   (interactive "DDirectory: \nsLanguages to tag from (none for default): ")
   (or langs (setq langs "Make,Java,Lua,Lisp,C,C++,PHP"))
   ;;(setq langmap "c:.c.h")
@@ -169,14 +175,15 @@ mark active) and deletes them."
    (shell-command
     ;;(format "ctags -f %s/TAGS -e -R %s" dir-name (directory-file-name dir-name))
     (concat "cd " dir-name " && ctags -eR " ;;--langmap=" langmap
-	    (and langs (concat " --languages=" langs))))
+            (and langs (concat " --languages=" langs))))
+
    ;;(format "cd %s && ctags -eR --languages=\"%s\"" dir-name langs))
    (let ((tags-revert-without-query t))  ; don't query, revert silently
      (visit-tags-table dir-name nil))))
 
 (defadvice find-tag (around refresh-tags activate)
-  "Rerun etags and reload tags if tag not found and redo find-tag.
-   If buffer is modified, ask about save before running etags."
+  "Rerun etags and reload tags if tag not found and redo `find-tag'.
+If buffer is modified, ask about save before running etags."
   (let ((extension (file-name-extension (buffer-file-name))))
     (condition-case err
         ad-do-it
@@ -189,8 +196,8 @@ mark active) and deletes them."
 
 ;;; Use the C-w Unix tty behaviour of deleting word backward
 (defadvice kill-region (before unix-werase activate compile)
-  "When called interactively with no active region, delete a single word
-    backwards instead."
+  "Kill selected region.
+When called interactively with no active region, delete a single word backwards instead."
   (interactive
    (if mark-active (list (region-beginning) (region-end))
      (list (save-excursion (backward-word 1) (point)) (point)))))
@@ -199,15 +206,16 @@ mark active) and deletes them."
 (add-hook 'after-save-hook 'autocompile)
 ;;;###autoload
 (defun autocompile ()
-  "Byte-compile the current file if it matchs ~/.emacs*.el
+  "Byte-compile the current file if matching '~/.emacs*.el'.
 This is useful for making sure you didn't make some stupid mistake when
-configuring, and also it will make emacs load faster."
+configuring, and also it will make Emacs load faster."
   (interactive)
   (require 'bytecomp)
   (if
       (and (string-match (concat (getenv "HOME") "/\.emacs.*\.el")
-                    (buffer-file-name))
-		   (not (string-match "\.emacs\.d/elpa" (buffer-file-name))))
+                         (buffer-file-name))
+           (not (string-match "\.dir-locals" (buffer-file-name)))
+           (not (string-match "\.emacs\.d/elpa" (buffer-file-name))))
       (byte-compile-file (buffer-file-name))))
 
 
@@ -215,19 +223,19 @@ configuring, and also it will make emacs load faster."
 ;; (defadvice barf-if-buffer-read-only (before ask-rooting-if-non-writable activate)
 ;;   (and buffer-read-only
 ;;        (not (file-writable-p (buffer-file-name)))
-;;        (y-or-n-p "No permissions, switch to root?")
+;;        (y-or-n-p "No permissions, switch to root? ")
 ;;        (open-as-root)))
 ;;;; (barf-if-buffer-read-only)
 ;;;;;
 ;;(add-hook 'before-save-hook 'switch-to-root)
 (defun open-as-root ()
-  "Using tramp, switches to editting the current file as root."
+  "Using tramp, switch to editting the current file as root."
   (interactive)
-   (set-visited-file-name
-    (concat "/sudo::" (buffer-file-name)))
-   ;;(and (file-writable-p (buffer-file-name))
-	 (setq buffer-read-only nil));)
-(defalias 'sudo 'open-as-root) 
+  (set-visited-file-name
+   (concat "/sudo::" (buffer-file-name)))
+  ;;(and (file-writable-p (buffer-file-name))
+  (setq buffer-read-only nil));)
+(defalias 'sudo 'open-as-root)
 
 ;; (defun smart-comint-up ()
 ;;    "Implement the behaviour of the up arrow key in comint mode.  At
@@ -244,11 +252,11 @@ configuring, and also it will make emacs load faster."
 ;; buffer."
 ;;    (interactive)
 ;;      (if (= (point) (point-max))
-;; 	(comint-next-input 1)
+;;      (comint-next-input 1)
 ;;        (forward-line 1)))
 
 ;; (eval-after-load "gud"
-;;   '(progn 
+;;   '(progn
 ;;      (define-key gud-mode-map (kbd "<up>") 'smart-comint-up)
 ;;      (define-key gud-mode-map (kbd "<down>") 'smart-comint-down)))
 
@@ -258,22 +266,19 @@ configuring, and also it will make emacs load faster."
 If NO-REFRESH is non-nil, the available package lists will not be
 re-downloaded in order to locate PACKAGE."
   (if (package-installed-p package min-version)
-      t
-    (if (or (assoc package package-archive-contents) no-refresh)
-        (package-install package)
-      (progn
-        (package-refresh-contents)
-        (require-package package min-version t)))))
+      (assoc package package-archive-contents)
+    (progn
+      (or (assoc package package-archive-contents) no-refresh (package-refresh-contents))
+      (package-install package))))
 
-
+
 ;;;;;;;;;;;
-(global-set-key (kbd "<M-gr>") (quote rgrep))
-;;(global-set-key "\347r" (quote rgrep))
+;;; Init customizations
 
 ;; Create cache directory if it doesn't exist
 (mkdir "~/.cache/emacs" 't)
 
-;; Write customize options for this machine in a different file 
+;; Write customize options for this machine in a different file
 ;; (this file won't be under version control to allow for specific installations
 ;; to override the settings)
 (setq custom-file "~/.emacs.d/custom.el")
@@ -286,16 +291,51 @@ re-downloaded in order to locate PACKAGE."
 (setq custom-theme-directory "~/.emacs.d/themes/")
 
 ;; Default themes to load if no other was set
-(and (eq custom-enabled-themes '())
-     (load-theme 'darkclean)
-     (load-theme 'config-base)) ; all my custom-izable configuration is in here, this is not a color theme
+(with-demoted-errors
+    (and (eq custom-enabled-themes '())
+         (load-theme 'darkclean)
+         (load-theme 'config-base))) ; all my custom-izable configuration is in here, this is not a color theme
 
-(package-initialize)
+(global-set-key (kbd "<M-gr>") (quote rgrep))
+;;(global-set-key "\347r" (quote rgrep))
+
 (require 'uniquify)
-(require-package 'evil)
-(require-package 'ack)
-(require-package 'js2-mode)
-(require-package 'auto-complete)
-(require-package 'flymake-jshint)
-(require-package 'flymake-shell)
-;;(require 'evil)
+
+
+;;; Extra package installation
+(with-demoted-errors
+    (progn ; don't abort if some cannot be installed
+
+      ;; gnu elpa packages:
+      (require-package 'flymake  '(1  0)    t)
+      (require-package 'ack      '(1 10)    t)
+      (require-package 'org      '(9  4)    t)
+
+      (and (require-package 'js2-mode '(20190219) t)
+           (add-hook 'js2-mode-hook 'flymake-jslint-load))
+
+      ;; melpa packages
+      (require-package 'auto-complete   '(1  5)     t)
+      (require-package 'smart-tabs-mode '(1  1)     t)
+      (require-package 'git-commit      '(2 90)     t)
+      (require-package 'gitconfig-mode  '(1  2)     t)
+      (require-package 'markdown-mode   '(2  4)     t)
+      (require-package 'yaml-mode       '(0  0)     t)
+      (require-package 'po-mode         '(0 21)     t)
+      (require-package 'php-mode        '(1 23)     t)
+      (require-package 'go-mode         '(1  5)     t)
+      (require-package 'lua-mode        '(20201010) t)
+
+      (and (require-package 'flymake-shell  '(0 8) t)
+           (add-hook 'sh-mode-hook 'flymake-shell-load))
+
+      (and (require-package 'flymake-eslint '(1 5) t)
+           (add-hook 'js-mode 'flymake-eslint-enable)
+           (add-hook 'js2-mode 'flymake-eslint-enable))
+
+      (and (require-package 'unicode-fonts  '(0 4) t)
+           (unicode-fonts-setup))
+
+      )) ; end of package setup
+
+;;; init.el ends here
