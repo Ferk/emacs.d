@@ -309,7 +309,7 @@ re-downloaded in order to locate PACKAGE."
       ;; gnu elpa packages:
       (require-package 'flymake  '(1  0)    t)
       (require-package 'ack      '(1 10)    t)
-      (require-package 'org      '(9  4)    t)
+      (require-package 'org      '(9  3)    t)
 
       (and (require-package 'js2-mode '(20190219) t)
            (add-hook 'js2-mode-hook 'flymake-jslint-load))
