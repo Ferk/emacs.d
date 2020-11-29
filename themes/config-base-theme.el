@@ -61,6 +61,11 @@
  '(show-paren-ring-bell-on-mismatch nil)
  '(show-paren-style (quote expression))
 
+ ;; Whitespace highlight
+ '(global-whitespace-mode t)
+ '(whitespace-style
+   '(face trailing tabs spaces lines-tail indentation space-before-tab tab-mark))
+
  ;; Dired options
  '(dired-omit-mode t)
  '(dired-auto-revert-buffer (quote dired-directory-changed-p))
