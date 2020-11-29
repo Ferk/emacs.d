@@ -1,10 +1,25 @@
 ;;; init.el --- Emacs Configuration File
-;;
+;; -*- lexical-binding: t; -*-
 ;;
 ;; Author: Fernando Carmona Varo <ferkiwi@gmail.com>
 ;; URL: https://github.com/Ferk/xdg_config/raw/master/HOME/.emacs.d/init.el
 
 ;;; Code:
+
+;;; Startup optimizations
+(defvar init-startup-time (current-time)) ; measure time taken
+;; Temporarily unset to prevent Emacs from loading extra files during startup
+(defvar last-file-name-handler-alist file-name-handler-alist)
+;; The garbage collector eats up a lot of time during startup, so up its
+;; memory threshold to prevent it from running at all
+(setq gc-cons-threshold most-positive-fixnum
+      file-name-handler-alist nil)
+
+;; In noninteractive sessions, prioritize non-byte-compiled source files to
+;; prevent the use of stale byte-code. Otherwise, it saves us a little IO time
+;; to skip the mtime checks on every *.elc file.
+;;(setq load-prefer-newer noninteractive)
+;; --------
 
 ;; Replace the annoying "yes or no" questions to a single keystroke "y or n"
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -337,5 +352,21 @@ re-downloaded in order to locate PACKAGE."
            (unicode-fonts-setup))
 
       )) ; end of package setup
+
+
+
+;;; Reset startup optimizations
+
+;; after startup, it is important you reset gc to some reasonable default. A large
+;; gc-cons-threshold will cause freezing and stuttering during long-term
+;; interactive use. I find these are nice defaults:
+(add-hook
+ 'emacs-startup-hook
+ (lambda ()
+   (setq gc-cons-threshold 16777216
+         gc-cons-percentage 0.1
+         file-name-handler-alist last-file-name-handler-alist))
+    (message "---- Emacs init-el loaded! [seconds taken: %.3f] ----"
+            (time-to-seconds (time-since init-startup-time))))
 
 ;;; init.el ends here
