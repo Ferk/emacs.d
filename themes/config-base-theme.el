@@ -29,7 +29,7 @@
 
  ;; Custom settings that are machine-specific and not to be versioned, will be added to custom.el
  '(make-backup-files nil)
- '(backup-directory-alist (quote (("~/.emacs.d/backups/"))))
+ '(backup-directory-alist (quote ((concat user-emacs-directory ("/backups/")))))
  '(clean-buffer-list-delay-special 900)
 
  ;; Modeline and Window appearance options
@@ -90,7 +90,7 @@
  ;; Grep
  '(grep-command "grep . -nHIr -e ")
  '(grep-scroll-output t)
- 
+
  ;; kill-ring
  '(kill-do-not-save-duplicates t)
  '(mark-even-if-inactive t)
@@ -112,7 +112,7 @@
  '(recentf-auto-cleanup (quote never))
  '(recentf-max-saved-items 512)
  '(recentf-mode t)
- '(recentf-save-file "~/.emacs.d/recentf")
+ '(recentf-save-file (concat user-emacs-directory "/recentf"))
 
  ;; TAGs
  '(tags-case-fold-search nil)
@@ -138,7 +138,7 @@
 
  '(c-default-style "linux")
  '(tab-width 4)
- 
+
  '(cpp-edit-list '(("1" default font-lock-comment-face t)
                    ("0" font-lock-comment-face default both)))
  '(cpp-known-face (quote default))

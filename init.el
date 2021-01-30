@@ -235,16 +235,16 @@ When called interactively with no active region, delete a single word backwards 
 (add-hook 'after-save-hook 'autocompile)
 ;;;###autoload
 (defun autocompile ()
-  "Byte-compile the current file if matching '~/.emacs*.el'.
+  "Byte-compile the current file if inside emacs directory.
 This is useful for making sure you didn't make some stupid mistake when
 configuring, and also it will make Emacs load faster."
   (interactive)
   (require 'bytecomp)
-  (if
-      (and (string-match (concat (getenv "HOME") "/\.emacs.*\.el")
-                         (buffer-file-name))
-           (not (string-match "\.dir-locals" (buffer-file-name)))
-           (not (string-match "\.emacs\.d/elpa" (buffer-file-name))))
+  (if (and
+       (string-suffix-p ".el" (buffer-file-name))
+       (string-prefix-p
+        (expand-file-name user-emacs-directory) (buffer-file-name))
+       (not (string-match "/elpa" (buffer-file-name))))
       (byte-compile-file (buffer-file-name))))
 
 
@@ -310,14 +310,18 @@ re-downloaded in order to locate PACKAGE."
 ;; Write customize options for this machine in a different file
 ;; (this file won't be under version control to allow for specific installations
 ;; to override the settings)
-(setq custom-file "~/.emacs.d/custom.el")
+(setq custom-file
+      (replace-regexp-in-string
+       "//+" "/" (concat user-emacs-directory "/custom.el")))
 (if (file-exists-p custom-file)
     (load custom-file)
   (customize-save-customized))
 
 ;; Custom-theme files
 ;; load from themes/ subdirectory (and not just .emacs.d)
-(setq custom-theme-directory "~/.emacs.d/themes/")
+(setq custom-theme-directory
+      (replace-regexp-in-string
+       "//+" "/" (concat user-emacs-directory "/themes/")))
 
 ;; Default themes to load if no other was set
 (with-demoted-errors
