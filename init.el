@@ -94,8 +94,22 @@
 (modify-coding-system-alist 'file "\\.po$\\|\\.po\\."
                             'po-find-file-coding-system)
 
+;; xterm-mouse configuration for terminal emacs frames
+(add-hook
+ 'xterm-mouse-mode-hook
+ (lambda ()
+   (global-set-key [mouse-4]   (lambda () (interactive) (scroll-down 5)))
+   (global-set-key [mouse-5]   (lambda () (interactive) (scroll-up 5)))
+   (global-set-key [S-mouse-4] (lambda () (interactive) (scroll-down 1)))
+   (global-set-key [S-mouse-5] (lambda () (interactive) (scroll-up 1)))
+   (global-set-key [C-mouse-4] (lambda () (interactive) (scroll-down)))
+   (global-set-key [C-mouse-5] (lambda () (interactive) (scroll-up)))
+   ))
+(add-hook ; apply for new open frames
+ 'after-make-frame-functions (xterm-mouse-mode window-system))
+(add-hook ; apply for already opened frame (first frame loads before init.el)
+ 'after-init (xterm-mouse-mode window-system))
 
-;;(load-file "~/.emacs.d/cedet-1.1/common/cedet.elc")
 
 
 ;;;; Functions
