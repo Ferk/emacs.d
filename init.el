@@ -289,16 +289,46 @@ configuring, and also it will make Emacs load faster."
 ;;      (define-key gud-mode-map (kbd "<up>") 'smart-comint-up)
 ;;      (define-key gud-mode-map (kbd "<down>") 'smart-comint-down)))
 
-;;; from purcell/emacs.d
-(defun require-package (package &optional min-version no-refresh)
-  "Install given PACKAGE, optionally requiring MIN-VERSION.
-If NO-REFRESH is non-nil, the available package lists will not be
-re-downloaded in order to locate PACKAGE."
-  (if (package-installed-p package min-version)
-      (assoc package package-archive-contents)
-    (progn
-      (or (assoc package package-archive-contents) no-refresh (package-refresh-contents))
-      (package-install package))))
+
+(defmacro init-package (package &rest options)
+  "Check if package is installed and initialize according to options.
+This is my custom simpler alternative to use-package. Usage:
+
+  (use-package package-name
+     [:keyword [option]]...)
+
+:init            Code to run before PACKAGE-NAME has been loaded.
+:hook            Specify hook(s) to attach this package to."
+  (unless (not options)
+    (let (key
+          (args options)
+          (pre-cmdsa '())
+          (cmds '())) ; cmds: list for macro expansion
+      (while args
+        (setq key (car args))
+        (setq args (cdr args))
+        (if (keywordp key)
+            (pcase (symbol-name key)
+              (":install"
+               (push `(unless (package-installed-p ,package)
+                        (package-install ,package))
+                     pre-cmdsa))
+              (":init"
+               (push (car args) cmds))
+              (":theme"
+               (push (list 'load-theme (car args)) cmds))
+              (keyword (push `(message "Unknown keyword %s" ,keyword) pre-cmdsa)))))
+      (add-to-list 'pre-cmdsa 'progn)
+      (add-to-list 'cmds 'progn)
+      (list
+       'condition-case  ; handle errors without interrupting init process
+       'err
+       pre-cmdsa
+       (unless (null cmds)
+         (list (nconc `(if (package-installed-p ,package))
+                      cmds)))
+       '((debug error)
+         (message "init-package error: %s" err))))))
 
 
 ;;;;;;;;;;;
@@ -336,40 +366,40 @@ re-downloaded in order to locate PACKAGE."
 
 
 ;;; Extra package installation
-(with-demoted-errors
-    (progn ; don't abort if some cannot be installed
+(require 'package)
 
-      ;; gnu elpa packages:
-      (require-package 'flymake  '(1  0)    t)
-      (require-package 'ack      '(1 10)    t)
-      (require-package 'org      '(9  3)    t)
+;; gnu elpa packages:
+(init-package 'flymake :install)
+(init-package 'org :install)
+(init-package 'ack :install)
+(init-package 'js2-mode
+              :init (add-hook 'js2-mode-hook 'flymake-jslint-load)
+              :install)
 
-      (and (require-package 'js2-mode '(20190219) t)
-           (add-hook 'js2-mode-hook 'flymake-jslint-load))
+;; melpa packages
+(init-package 'auto-complete    :install)
+(init-package 'smart-tabs-mode  :install)
+(init-package 'git-commit       :install)
+(init-package 'gitconfig-mode   :install)
+(init-package 'markdown-mode    :install)
+(init-package 'yaml-mode        :install)
+(init-package 'po-mode          :install)
+(init-package 'php-mode         :install)
+(init-package 'go-mode          :install)
+(init-package 'lua-mode         :install)
+(init-package 'flymake-shell
+              :init (add-hook 'sh-mode-hook 'flymake-shell-load)
+              :install)
+(init-package 'flymake-eslint
+              :init (progn
+                      (add-hook 'js-mode 'flymake-eslint-enable)
+                      (add-hook 'js2-mode 'flymake-eslint-enable))
+              :install)
+(init-package 'unicode-fonts
+              :init (unicode-fonts-setup)
+              :install)
 
-      ;; melpa packages
-      (require-package 'auto-complete   '(1  5)     t)
-      (require-package 'smart-tabs-mode '(1  1)     t)
-      (require-package 'git-commit      '(2 90)     t)
-      (require-package 'gitconfig-mode  '(1  2)     t)
-      (require-package 'markdown-mode   '(2  4)     t)
-      (require-package 'yaml-mode       '(0  0)     t)
-      (require-package 'po-mode         '(0 21)     t)
-      (require-package 'php-mode        '(1 23)     t)
-      (require-package 'go-mode         '(1  5)     t)
-      (require-package 'lua-mode        '(20201010) t)
-
-      (and (require-package 'flymake-shell  '(0 8) t)
-           (add-hook 'sh-mode-hook 'flymake-shell-load))
-
-      (and (require-package 'flymake-eslint '(1 5) t)
-           (add-hook 'js-mode 'flymake-eslint-enable)
-           (add-hook 'js2-mode 'flymake-eslint-enable))
-
-      (and (require-package 'unicode-fonts  '(0 4) t)
-           (unicode-fonts-setup))
-
-      )) ; end of package setup
+;;; end of package setup
 
 
 
