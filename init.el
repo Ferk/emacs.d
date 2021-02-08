@@ -310,6 +310,8 @@ This is my custom simpler alternative to use-package. Usage:
             (pcase (symbol-name key)
               (":install"
                (push `(unless (package-installed-p ,package)
+                        (unless package-archive-contents ; refresh if no content
+                          (package-refresh-contents))
                         (package-install ,package))
                      pre-cmdsa))
               (":init"
@@ -357,7 +359,6 @@ This is my custom simpler alternative to use-package. Usage:
     (and (eq custom-enabled-themes '())
          (load-theme 'darkclean)
          (load-theme 'config-base))) ; all my custom-izable configuration is in here, this is not a color theme
-
 (global-set-key (kbd "<M-gr>") (quote rgrep))
 ;;(global-set-key "\347r" (quote rgrep))
 
