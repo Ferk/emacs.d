@@ -7,7 +7,6 @@
 ;;; Code:
 
 ;;; Startup optimizations
-(defvar init-startup-time (current-time)) ; measure time taken
 ;; Temporarily unset to prevent Emacs from loading extra files during startup
 (defvar last-file-name-handler-alist file-name-handler-alist)
 ;; The garbage collector eats up a lot of time during startup, so up its
@@ -415,6 +414,6 @@ This is my custom simpler alternative to use-package. Usage:
          gc-cons-percentage 0.1
          file-name-handler-alist last-file-name-handler-alist))
     (message "---- Emacs init-el loaded! [seconds taken: %.3f] ----"
-            (time-to-seconds (time-since init-startup-time))))
+             (time-to-seconds (time-since before-init-time))))
 
 ;;; init.el ends here
